@@ -1,0 +1,2 @@
+Defaults!/usr/local/sbin/pbs-restore-client !requiretty
+ALL ALL=(root) NOPASSWD: /usr/local/sbin/pbs-restore-client

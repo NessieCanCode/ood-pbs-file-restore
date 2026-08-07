@@ -1,0 +1,18 @@
+title: "PBS File Restore"
+description: "Browse and safely restore user-owned home-directory files from Proxmox Backup Server through Open OnDemand."
+software: "Proxmox Backup Server"
+app_type: "companion_app"
+implementation_tags:
+  - "passenger"
+  - "api"
+maintainer:
+  name: "Sqoia Labs LLC"
+  support_url: "https://github.com/NessieCanCode/ood-pbs-file-restore/issues"
+website: "https://www.proxmox.com/en/products/proxmox-backup-server/overview"
+docs: "https://github.com/NessieCanCode/ood-pbs-file-restore#readme"
+tags:
+  - "backup"
+  - "data management"
+  - "python"
+  - "security"
+  - "storage"

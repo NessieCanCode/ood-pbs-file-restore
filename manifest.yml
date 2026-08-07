@@ -1,0 +1,6 @@
+---
+name: File Restore
+description: Browse and restore your home-directory files from the last 30 days of backups.
+category: Files
+icon: fa://history
+new_window: false
