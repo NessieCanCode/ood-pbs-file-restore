@@ -21,7 +21,7 @@ security boundary, not an ordinary web application.
 - [ ] The token cannot modify, prune, delete, or administer backups.
 - [ ] PBS TLS uses a trusted certificate or an installed private CA; certificate
   verification has not been disabled.
-- [ ] `/etc/pbs-home-backup.env` is root-owned, mode `0600`, and excluded from
+- [ ] `/etc/ood-pbs-file-restore.env` is root-owned, mode `0600`, and excluded from
   configuration bundles and support captures.
 
 ## SSH broker boundary

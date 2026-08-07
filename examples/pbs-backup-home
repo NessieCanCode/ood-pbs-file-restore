@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+umask 077
+
+readonly env_file=/etc/pbs-home-backup-writer.env
+readonly log_file=/var/log/pbs-home-backup.log
+readonly lock_file=/run/lock/pbs-home-backup.lock
+
+[[ ${EUID} -eq 0 ]] || { echo "Run as root." >&2; exit 1; }
+[[ -r $env_file ]] || { echo "Missing $env_file" >&2; exit 1; }
+
+# shellcheck disable=SC1090
+source "$env_file"
+: "${PBS_PASSWORD:?missing PBS_PASSWORD}"
+: "${PBS_FINGERPRINT:?missing PBS_FINGERPRINT}"
+: "${PBS_REPOSITORY:?missing PBS_REPOSITORY}"
+: "${PBS_HOME_BACKUP_ARCHIVE:?missing PBS_HOME_BACKUP_ARCHIVE}"
+: "${PBS_HOME_BACKUP_SOURCE:?missing PBS_HOME_BACKUP_SOURCE}"
+: "${PBS_HOME_BACKUP_ID:?missing PBS_HOME_BACKUP_ID}"
+export PBS_PASSWORD PBS_FINGERPRINT PBS_REPOSITORY
+
+exec 9>"$lock_file"
+if ! flock --nonblock 9; then
+  echo "$(date --iso-8601=seconds) backup skipped: another run is active" >> "$log_file"
+  exit 0
+fi
+
+exec >> "$log_file" 2>&1
+echo "$(date --iso-8601=seconds) backup started"
+if /usr/local/sbin/proxmox-backup-client backup \
+  "${PBS_HOME_BACKUP_ARCHIVE}:${PBS_HOME_BACKUP_SOURCE}" \
+  --backup-type host \
+  --backup-id "$PBS_HOME_BACKUP_ID" \
+  --repository "$PBS_REPOSITORY"; then
+  echo "$(date --iso-8601=seconds) backup completed"
+else
+  status=$?
+  echo "$(date --iso-8601=seconds) backup failed with status $status"
+  exit "$status"
+fi

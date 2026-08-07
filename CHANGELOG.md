@@ -3,6 +3,19 @@
 All notable changes to this project are documented here. The project follows
 [Semantic Versioning](https://semver.org/).
 
+## [1.0.2] - 2026-08-07
+
+### Added
+
+- Live-tested portal, broker, PBS server, and static-client version matrix.
+- Optional shared-home backup producer guide and checksum-enforcing static-client installer.
+- Sanitized backup writer command and separate writer environment example.
+
+### Changed
+
+- Clarified that the restore application uses the PBS HTTPS API and does not require `proxmox-backup-client` at runtime.
+- Separated the read-only restore environment from the more privileged backup-writer environment.
+
 ## [1.0.1] - 2026-08-07
 
 ### Added

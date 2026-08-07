@@ -54,7 +54,7 @@ acceptance tests, troubleshooting, upgrades, and rollback.
 
 ### Broker/storage host
 
-- Python 3.9 or later
+- Python 3.9 or later recommended
 - NSS resolution for the same users and numeric IDs as Open OnDemand
 - Direct access to the managed home filesystem
 - TLS connectivity to Proxmox Backup Server
@@ -63,6 +63,24 @@ acceptance tests, troubleshooting, upgrades, and rollback.
 The reference implementation expects one shared-home `host` backup whose pxar
 archive contains a top-level directory per username. Other layouts require a
 mapping adapter with equivalent identity and path validation.
+
+### Live-tested versions
+
+The reference workflow was checked live on 2026-08-07 with:
+
+| Role | Live-tested versions |
+| --- | --- |
+| Open OnDemand portal | Rocky Linux 9.8, Open OnDemand 4.2.3, Python 3.9.25, PyYAML 5.4.1, OpenSSH 9.9p1 |
+| Broker and backup source | Red Hat Enterprise Linux 8.10, Python 3.6.8, OpenSSH 8.0p1 |
+| Static backup client | `proxmox-backup-client` 4.2.3 on RHEL 8.9/8.10 and Rocky Linux 9.8 x86_64 |
+| PBS server | Debian 13, PBS runtime 4.2.2 with server package 4.2.5-1 installed |
+
+Python 3.6.8 describes the current live broker, but it is end-of-life and is
+not recommended for a new deployment. Other comparable Rocky Linux and
+AlmaLinux systems remain compatibility candidates rather than claimed
+live-tested combinations. See the
+[backup producer guide](docs/CREATING-SHARED-HOME-BACKUPS.md) for the precise
+test boundary and checksum-pinned installation.
 
 ## Repository layout
 
@@ -77,6 +95,7 @@ mapping adapter with equivalent identity and path validation.
 | `validate.py` | Live confinement and restore validation client |
 | `docs/DEPLOYMENT.md` | End-to-end clean installation, testing, upgrade, and rollback |
 | `docs/SECURITY-CHECKLIST.md` | Production security review checklist |
+| `docs/CREATING-SHARED-HOME-BACKUPS.md` | Optional static-client and backup-producer setup |
 | `examples/` | Sanitized deployment configuration examples |
 | `PORTABILITY.md` | Security and portability review |
 
@@ -84,7 +103,7 @@ mapping adapter with equivalent identity and path validation.
 
 ### Broker environment
 
-Create `/etc/pbs-home-backup.env` on the broker with mode `0600`:
+Create `/etc/ood-pbs-file-restore.env` on the broker with mode `0600`:
 
 ```bash
 PBS_API_ROOT='https://pbs.example.edu:8007/api2/json/admin/datastore/DATASTORE'
@@ -95,6 +114,13 @@ PBS_BACKUP_ID='storage-server'
 
 Never commit this file or expose it to portal hosts. Use a dedicated token and
 limit its ACL to the required datastore or namespace.
+
+The restore application does not invoke `proxmox-backup-client`; it consumes
+existing snapshots through the PBS HTTPS API. Sites that still need to create
+the expected shared-home snapshots can follow
+[Creating shared-home backups](docs/CREATING-SHARED-HOME-BACKUPS.md). That
+optional guide includes checksum-pinned installation of the official static
+client on Enterprise Linux systems.
 
 Review these centralized site values before deployment:
 

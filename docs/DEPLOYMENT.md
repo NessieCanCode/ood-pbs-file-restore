@@ -45,7 +45,7 @@ Obtain a protected source checkout on each host where files will be installed:
     git clone https://github.com/NessieCanCode/ood-pbs-file-restore.git \
       /root/ood-pbs-file-restore-src
     cd /root/ood-pbs-file-restore-src
-    git checkout v1.0.1
+    git checkout v1.0.2
 
 Run source-relative commands in this guide from that checkout. Verify the tag
 or commit according to local software-supply-chain policy before installing it.
@@ -92,7 +92,7 @@ Review the constants at the top of `broker.py` before installation:
 | `BACKUP_TYPE` | `host` | Only after implementing and reviewing another PBS group type |
 | `ARCHIVE_NAME` | `root.pxar.didx` | The shared-home pxar archive has another name |
 | `CATALOG_NAME` | `catalog.pcat1.didx` | PBS produces another catalog name |
-| `ENV_FILE` | `/etc/pbs-home-backup.env` | Site policy requires another protected path |
+| `ENV_FILE` | `/etc/ood-pbs-file-restore.env` | Site policy requires another protected path |
 | `STAGING_ROOT` | `/home/.pbs-restore-staging` | Another root-only staging filesystem is required |
 
 Changing `ARCHIVE_NAME`, the `/home` identity rule, or archive prefix is security-sensitive. Re-run traversal and cross-user confinement tests after any such change.
@@ -101,8 +101,8 @@ Changing `ARCHIVE_NAME`, the `/home` identity rule, or archive prefix is securit
 
 Start from the example file:
 
-    install -o root -g root -m 0600 examples/pbs-home-backup.env.example /etc/pbs-home-backup.env
-    editor /etc/pbs-home-backup.env
+    install -o root -g root -m 0600 examples/ood-pbs-file-restore.env.example /etc/ood-pbs-file-restore.env
+    editor /etc/ood-pbs-file-restore.env
 
 Set all four values:
 
@@ -113,7 +113,7 @@ Set all four values:
 
 `PBS_API_ROOT` ends at the datastore name and must not have a trailing slash. Do not prefix lines with `export`; the broker intentionally ignores exported shell syntax. Confirm protection without printing the file:
 
-    stat -c '%U:%G %a %n' /etc/pbs-home-backup.env
+    stat -c '%U:%G %a %n' /etc/ood-pbs-file-restore.env
 
 The expected result is `root:root 600`.
 
@@ -230,7 +230,7 @@ A successful response contains `"ok": true` and at least one completed snapshot.
 
 ### 7.1 Install dependencies
 
-The portal requires Python 3.9 or later and PyYAML 6.x. Prefer the operating-system PyYAML package when Passenger uses the system Python. Alternatively, provide a site-managed Python environment that Passenger is explicitly configured to use.
+The portal requires Python 3.9 or later and PyYAML 5.4 or later. Prefer the operating-system PyYAML package when Passenger uses the system Python. Alternatively, provide a site-managed Python environment that Passenger is explicitly configured to use.
 
 Verify the interpreter:
 
@@ -241,7 +241,7 @@ Verify the interpreter:
     cd /var/www/ood/apps/sys
     git clone https://github.com/NessieCanCode/ood-pbs-file-restore.git pbs-file-restore
     cd pbs-file-restore
-    git checkout v1.0.1
+    git checkout v1.0.2
     chown -R root:root .
     find . -type d -exec chmod 0755 {} +
     find . -type f -exec chmod 0644 {} +
@@ -367,6 +367,6 @@ Never publish:
 - Private/public SSH key material or full host keys
 - Internal hostnames, IP addresses, inventories, or certificates
 - Production usernames, UIDs, backup paths, catalog responses, or contents
-- `/etc/pbs-home-backup.env`
+- `/etc/ood-pbs-file-restore.env`
 
 Before production enablement, complete [SECURITY-CHECKLIST.md](SECURITY-CHECKLIST.md).
