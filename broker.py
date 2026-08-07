@@ -66,7 +66,6 @@ def load_environment():
             values[key] = parsed[0]
     required = (
         "PBS_PASSWORD",
-        "PBS_REPOSITORY",
         "PBS_API_ROOT",
         "PBS_AUTH_ID",
         "PBS_BACKUP_ID",

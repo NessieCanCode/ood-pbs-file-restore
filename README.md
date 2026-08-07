@@ -40,6 +40,11 @@ key, authority to select another username, or a general-purpose root command.
 
 ## Requirements
 
+For a clean installation, start with the complete
+[deployment guide](docs/DEPLOYMENT.md). It includes the topology assumptions,
+PBS permissions, SSH forced command, file modes, portal installation,
+acceptance tests, troubleshooting, upgrades, and rollback.
+
 ### Open OnDemand portal
 
 - Open OnDemand 4.x with Passenger application support
@@ -70,6 +75,9 @@ mapping adapter with equivalent identity and path validation.
 | `broker.py` | Privileged storage-side PBS broker |
 | `sudoers` | Example constrained sudo policy |
 | `validate.py` | Live confinement and restore validation client |
+| `docs/DEPLOYMENT.md` | End-to-end clean installation, testing, upgrade, and rollback |
+| `docs/SECURITY-CHECKLIST.md` | Production security review checklist |
+| `examples/` | Sanitized deployment configuration examples |
 | `PORTABILITY.md` | Security and portability review |
 
 ## Configuration
@@ -82,7 +90,6 @@ Create `/etc/pbs-home-backup.env` on the broker with mode `0600`:
 PBS_API_ROOT='https://pbs.example.edu:8007/api2/json/admin/datastore/DATASTORE'
 PBS_AUTH_ID='restore@pbs!openondemand'
 PBS_PASSWORD='REPLACE_WITH_TOKEN_SECRET'
-PBS_REPOSITORY='restore@pbs@pbs.example.edu:DATASTORE'
 PBS_BACKUP_ID='storage-server'
 ```
 
@@ -111,7 +118,8 @@ Review these centralized site values before deployment:
    for the installed Open OnDemand version.
 
 The exact forced-command and deployment configuration is security-sensitive.
-Read [PORTABILITY.md](PORTABILITY.md) before deploying.
+Follow [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md), then review
+[docs/SECURITY-CHECKLIST.md](docs/SECURITY-CHECKLIST.md) before enabling users.
 
 ## Security invariants
 

@@ -51,9 +51,7 @@ PAGE = r"""<!doctype html>
     <nav class="navbar navbar-expand-md shadow-sm navbar-color navbar-dark" aria-label="Main Menu">
       <ul class="navbar-nav w-100 align-items-center" role="menubar">
         <li role="none">
-          <a class="navbar-brand navbar-brand-logo" href="/pun/sys/dashboard/" role="menuitem">
-            <img class="img-fluid" src="/public/UCM_Logos_HPC.png" alt="Open OnDemand">
-          </a>
+          <a class="navbar-brand" href="/pun/sys/dashboard/" role="menuitem">Open OnDemand</a>
         </li>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
